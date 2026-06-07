@@ -1,5 +1,3 @@
-package shipTrack;
-
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -39,7 +37,7 @@ public class DriverMenu {
                     updateDeliveryStatus(scan, user[0]);
                     break;
                 case 3:
-                    UserStore.updateInfo(scan, user);
+                    updateInfo(scan, user);
                     break;
                 case 4:
                     running = false;
@@ -114,5 +112,66 @@ public class DriverMenu {
 
         ShipmentStore.updateStatus(shipmentID, newStatus);
         System.out.println("Status updated to: " + newStatus);
+    }
+
+    private static void updateInfo(Scanner scan, String[] user) {
+        System.out.println("\n\t\t\tYour Information");
+        MyLogger.writeToLog("Driver " + user[0] + " accessed personal info update.");
+        System.out.println("Name: " + user[3]);
+        System.out.println("ID Number: " + user[4]);
+        System.out.println("Contact: " + user[5]);
+        System.out.println("\nWhat would you like to update?");
+        System.out.println("1. Name");
+        System.out.println("2. Contact number");
+        System.out.println("3. Password");
+        System.out.println("4. Back");
+        int choice;
+
+        try {
+            choice = scan.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            MyLogger.writeToLog("Invalid input in update info by driver: " + user[0]);
+            scan.nextLine();
+            return;
+        }
+
+        switch (choice) {
+            case 1:
+                System.out.println("Enter new name:");
+                scan.nextLine();
+                user[3] = scan.nextLine();
+                UserStore.updateUser(user[0], user);
+                System.out.println("Name updated.");
+                MyLogger.writeToLog("Driver " + user[0] + " updated their name.");
+                break;
+            case 2:
+                System.out.println("Enter new contact number:");
+                user[5] = scan.next();
+                UserStore.updateUser(user[0], user);
+                System.out.println("Contact updated.");
+                MyLogger.writeToLog("Driver " + user[0] + " updated their contact number.");
+                break;
+            case 3:
+                System.out.println("Enter new password:");
+                System.out.println(PasswordPolicy.getMinDigits() + " Digit\n" + PasswordPolicy.getMinLowercase() + " Lowercase character\n" + PasswordPolicy.getMinUppercase() + " Uppercase character\n" + PasswordPolicy.getMinSpecial() + " special character\n and at least have " + PasswordPolicy.getMinLength() + " character");
+                String newPassword = scan.next();
+                if (!PasswordPolicy.validate(newPassword)) {
+                    System.out.println("Password does not meet requirements.");
+                    MyLogger.writeToLog("Driver " + user[0] + " password change failed: policy not met.");
+                    return;
+                }
+                user[1] = AuthService.getSHA256Hash(newPassword);
+                UserStore.updateUser(user[0], user);
+                System.out.println("Password updated.");
+                MyLogger.writeToLog("Password changed for Driver: " + user[0]);
+                break;
+            case 4:
+                MyLogger.writeToLog("Driver " + user[0] + " went back from update info.");
+                break;
+            default:
+                System.out.println("Invalid choice");
+               
+        }
     }
 }

@@ -1,12 +1,8 @@
-package shipTrack;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class UserStore {
 
@@ -34,7 +30,7 @@ public class UserStore {
                 }
             }
         } catch (Exception e) {
-            MyLogger.writeToLog("Error in while reading users file while searching for: " + username);
+            MyLogger.writeToLog("Error reading users file while searching for: " + username);
         }
         return null;
     }
@@ -154,67 +150,4 @@ public class UserStore {
             MyLogger.writeToLog("setLocked failed: user not found: " + username);
         }
     }
-
-public static void updateInfo(Scanner scan, String[] user) {
-	System.out.println("\n\t\t\tYour Information");
-	MyLogger.writeToLog("Dispatcher " + user[0] + " accessed personal info update.");
-	System.out.println("Name: " + user[3]);
-	System.out.println("ID Number: " + user[4]);
-	System.out.println("Contact: " + user[5]);
-	System.out.println("\nWhat would you like to update?");
-	System.out.println("1. Name");
-	System.out.println("2. Contact number");
-	System.out.println("3. Password");
-	System.out.println("4. Back");
-	int choice;
-
-	try {
-		choice = scan.nextInt();
-	} catch (InputMismatchException e) {
-		System.out.println("Invalid input. Please enter a number.");
-		scan.nextLine();
-		return;
-	}
-
-	switch (choice) {
-	case 1:
-		System.out.println("Enter new name:");
-		scan.nextLine();
-		user[3] = scan.nextLine();
-		UserStore.updateUser(user[0], user);
-		System.out.println("Name updated.");
-		MyLogger.writeToLog("Dispatcher " + user[0] + " updated their name.");
-		break;
-	case 2:
-		System.out.println("Enter new contact number:");
-		user[5] = scan.next();
-		UserStore.updateUser(user[0], user);
-		System.out.println("Contact updated.");
-		MyLogger.writeToLog("Dispatcher " + user[0] + " updated their contact number.");
-		break;
-	case 3:
-		System.out.println("Enter new password:");
-		System.out.println(PasswordPolicy.getMinDigits() + " Digit\n" + PasswordPolicy.getMinLowercase()
-				+ " Lowercase character\n" + PasswordPolicy.getMinUppercase() + " Uppercase character\n"
-				+ PasswordPolicy.getMinSpecial() + " special character\n and at least have "
-				+ PasswordPolicy.getMinLength() + " character");
-		String newPassword = scan.next();
-		if (!PasswordPolicy.validate(newPassword)) {
-			System.out.println("Password does not meet requirements.");
-			MyLogger.writeToLog("Dispatcher " + user[0] + " password change failed: policy not met.");
-			return;
-		}
-		user[1] = AuthService.getSHA256Hash(newPassword);
-		UserStore.updateUser(user[0], user);
-		System.out.println("Password updated.");
-		MyLogger.writeToLog("Password changed for Dispatcher: " + user[0]);
-		break;
-	case 4:
-		MyLogger.writeToLog("Dispatcher " + user[0] + " went back from update info.");
-		break;
-	default:
-		System.out.println("Invalid input");
-		MyLogger.writeToLog("Invalid choice in update info by dispatcher: " + user[0]);
-	}
-}
 }

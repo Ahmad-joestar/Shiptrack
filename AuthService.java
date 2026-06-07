@@ -1,5 +1,3 @@
-
-package shipTrack;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -43,7 +41,7 @@ public class AuthService {
 
         UserStore.resetFailedAttempts(user);
         System.out.println("Login successful. Welcome, " + user[3]);
-        MyLogger.writeToLog("Successful login: " + username );
+        MyLogger.writeToLog("Successful login: " + username + " with role: " + user[2]);
         return user;
     }
 

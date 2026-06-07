@@ -1,11 +1,12 @@
-package shipTrack;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ShipTrack {
 
-  
+    private ShipTrack() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static void main(String[] args) {
         try (Scanner scan = new Scanner(System.in)) {
             UserStore.initAdminIfNeeded();

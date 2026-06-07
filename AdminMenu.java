@@ -1,11 +1,12 @@
-package shipTrack;
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
+
+   
+
     public static void menu(Scanner scan, String[] user) {
         
         boolean running = true;
@@ -13,7 +14,7 @@ public class AdminMenu {
             System.out.println("\n\t\t\tAdmin Menu");
             System.out.println("1. Register new user (dispatcher or driver)");
             System.out.println("2. Remove dispatcher or delivery person");
-            System.out.println("3. make adjustments to password strength requirements");
+            System.out.println("3. Make adjustments to password strength requirements");
             System.out.println("4. Set maximum login attempts");
             System.out.println("5. Lock or unlock an account");
             System.out.println("6. View users");
@@ -129,10 +130,12 @@ public class AdminMenu {
 
     private static void removeUser(Scanner scan) {
         System.out.println("\n\t\t\tRemove User");
-        MyLogger.writeToLog("admin accessed removal process.");
+        MyLogger.writeToLog("Admin started user removal process.");
         viewAllUsers();
         System.out.println("Enter username to remove:");
         String username = scan.next();
+        MyLogger.writeToLog("Admin attempting to remove user: " + username);
+
         String[] target = UserStore.findUser(username);
         if (target == null) {
             System.out.println("User not found.");
